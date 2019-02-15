@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+main()
+{
+    string s;
+    int t;
+    long long int i,j,l,r;
+    cin>>t;
+    for(i=1;i<=t;i++)
+    {
+        cin>>s;
+        cin>>l;
+        r=0;
+        if(l==5 && (s[s.size()-1]=='0' || s[s.size()-1]=='5'))
+           {
+               printf("Case %d: divisible\n",i);
+               continue;
+           }
+        else if(l==2 && (s[s.size()-1]-48)%2==0)
+            {
+                printf("Case %d: divisible\n",i);
+                continue;
+            }
+        for(j=0;j<s.size();j++)
+        {
+           if(s[j]>='0' && s[j]<='9')
+           {
+
+                r = r*10 + s[j]-48;
+                r = r%l;
+           }
+        }
+
+        if(r==0) printf("Case %d: divisible\n",i);
+        else printf("Case %d: not divisible\n",i);
+        s.clear();
+    }
+return 0;
+}
