@@ -1,0 +1,106 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define pii pair<int,int>
+#define pli pair<long long int,int>
+#define pbi pair<bool,int>
+#define pob pop_back
+#define all(a) a.begin(),a.end()
+#define fio ios_base::sync_with_stdio(false); cin.tie(0);cout.tie(0);
+#define i64 long long int
+#define mem(x,y) memset(x,y,sizeof(x))
+#define fill(arr,b) fill(arr, arr+sizeof(arr)/sizeof(arr[0]), b)
+#define maxarr(n,arr,m) m =-1e9;for(int i=0;i<n;i++)if(arr[i]>m) m=arr[i];
+
+const double pi = acos(-1.0);
+const int maxn = (i64)2e9+5;
+int arr[100005];
+int tree[400005];
+bool fg = false;
+void init(int node, int b, int e){
+    if(b == e){
+         tree[node] = arr[b];
+         return;
+    }
+    int left = 2*node;
+    int right = 2*node + 1;
+    int m = (b+e)/2;
+    init(left,b,m);
+    init(right,m+1,e);
+    tree[node] = tree[left]+tree[right];
+}
+
+int query(int node, int b, int e, int i, int j){
+    if(e<i || b>j) return 0;
+    else if(e<=j && b>=i){
+        return tree[node];
+    }
+    int left = 2*node;
+    int right = 2*node + 1;
+    int m = (b+e)/2;
+    int v1 = query(left,b,m,i,j);
+    int v2 = query(right,m+1,e,i,j);
+    return v1+v2;
+}
+
+void update(int node, int b, int e, int i, int value){
+    if(i<b || i>e) return;
+    else if(b==e){
+        if(!fg) tree[node] = tree[node]+value;
+        else tree[node] = 0;
+        return;
+    }
+    int left = 2*node;
+    int right = 2*node + 1;
+    int m = (b+e)/2;
+    update(left,b,m,i,value);
+    update(right,m+1,e,i,value);
+    tree[node] = tree[left]+tree[right];
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int t;
+    scanf("%d",&t);
+    for(int j = 1 ; j<=t ; j++)
+    {
+        int n,q;
+        scanf("%d%d",&n,&q);
+        for(int i = 1 ; i<=n ; i++) scanf("%d",&arr[i]);
+        init(1,1,n);
+        printf("Case %d:\n", j);
+        while(q--)
+        {
+            int x;
+            scanf("%d",&x);
+            if(x==1)
+            {
+                int index;
+                scanf("%d",&index);
+                index++;
+                fg = 1;
+                printf("%d\n",query(1,1,n,index,index));
+                update(1,1,n,index,0);
+            }
+            if(x==2)
+            {
+                int index,v;
+                fg = false;
+                scanf("%d%d",&index,&v);
+                index++;
+                update(1,1,n,index,v);
+
+            }
+            if(x==3)
+            {
+                int l,r;
+                scanf("%d%d",&l,&r);
+                l++;r++;
+                printf("%d\n",query(1,1,n,l,r));
+
+            }
+        }
+    }
+    return 0;
+}
