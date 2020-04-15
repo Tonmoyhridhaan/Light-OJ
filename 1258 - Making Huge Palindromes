@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define pii pair<int,int>
+#define pli pair<long long int,int>
+#define pbi pair<bool,int>
+#define pob pop_back
+#define all(a) a.begin(),a.end()
+#define fio ios_base::sync_with_stdio(false); cin.tie(0);cout.tie(0);
+#define i64 long long int
+#define mem(x,y) memset(x,y,sizeof(x))
+#define fill(arr,b) fill(arr, arr+sizeof(arr)/sizeof(arr[0]), b)
+#define maxarr(n,arr,m) m =-1e9;for(int i=0;i<n;i++)if(arr[i]>m) m=arr[i];
+#define read freopen("input.txt","r",stdin);
+#pragma GCC target("avx2")
+#pragma GCC optimization("03")
+#pragma GCC optimization(unroll-loops)
+const double pi = acos(-1.0);
+const int maxn = (i64)2e9+5;
+
+int lps[1000004];
+int sz;
+char s[1000006],sub[1000006];
+void createlps()
+{
+    int i = 0;
+    for(int j = 1 ; j<sz ; )
+    {
+        if(sub[i] == sub[j])
+        {
+            lps[j] = i+1;i++;j++;
+        }
+        else
+        {
+            if(i!=0) i = lps[i-1];
+            else j++;
+        }
+    }
+
+}
+
+int kmp()
+{
+    int i=0, j=0;
+    while(i<sz)
+    {
+        if(s[i] == sub[j])
+        {
+            i++ ; j++;
+        }
+        else
+        {
+            if(j!=0) j = lps[j-1];
+            else i++;
+        }
+    }
+        return sz-j;
+}
+int main()
+{
+   //read;
+   int t;
+   scanf("%d",&t);
+   for(int z = 1 ; z<=t ; z++)
+   {
+       scanf("%s",s);
+       sz = strlen(s);
+       reverse_copy(s,s+sz,sub);
+       createlps();
+       int ans = kmp();
+       //printf("%d\n",ans);
+       printf("Case %d: %d\n",z,sz+ans);
+   }
+return 0;
+}
